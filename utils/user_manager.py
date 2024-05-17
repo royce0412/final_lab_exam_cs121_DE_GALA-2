@@ -8,18 +8,25 @@ class UserManager:
 	def __init__(self):
 		self.user_list = {}
 
-	def load_users():
-		pass
+	def load_users(self):
+		if not os.path.exists("users.txt"):
+			with open('users.txt', 'w') as f:
+				f.write("")
+		else:
+			with open('users.txt', 'r') as f:
+				for line in f:
+					values = line.strip().split(',')
+					load_username = values[0]
+					load_password = values[1]
+					
+					self.user_list[load_username] = User(load_username, load_password)
 
-	def save_users():
-		pass
 
-	def validate_username():
-		pass
-
-	def validate_password():
-		pass
-
+	def save_users(self):
+		with open('users.txt', 'w') as f:
+			for username, user in self.user_list.items():
+				f.write(f"{user.username},{user.password}\n")
+				
 	def register(self):
 		register_username = input("Enter username (at least 4 characters), or leave blank to cancel: ")
 		if len(register_username) >= 4:
@@ -27,7 +34,7 @@ class UserManager:
 			if len(register_password) >= 8:
 				if register_username not in self.user_list:
 					self.user_list[register_username] = User(register_username, register_password)
-					
+					return
 			else:
 				input("Username must be at least 8 characters long...Enter to return")
 				UserManager.register(self)
@@ -37,7 +44,7 @@ class UserManager:
 		else:
 			input("Username must be at least 4 characters long.")
 			UserManager.register(self) 
-        
+		
 	def login(self):
 		print("Login Account")
 		login_username = input("Username: ")
@@ -46,6 +53,7 @@ class UserManager:
 			input("Account logged in successfully...")
 			Cls()
 		elif login_username or login_password == "":
+			Cls()
 			return
 		else:
 			input("Invalid username or password...Enter to continue")
