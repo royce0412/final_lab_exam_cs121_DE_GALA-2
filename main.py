@@ -7,6 +7,7 @@ def Cls():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def main():
+        usermanager.load_users()
         while True:
             print("Welcome to Dice Roll Game!")
             print("1. Register")
