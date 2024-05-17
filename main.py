@@ -1,5 +1,8 @@
 import os
 from utils import user_manager
+
+usermanager = user_manager.UserManager()
+
 def Cls():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -12,7 +15,7 @@ def main():
             main_choice = input("Enter: ")
             Cls()
             if main_choice == "1":
-                user_manager.register()
+                usermanager.register()
             elif main_choice == "2":
                 pass
             elif main_choice == "3":

@@ -1,11 +1,11 @@
-
+from .dice_game import *
 import os
 
 def Cls():
 	os.system('cls' if os.name == 'nt' else 'clear')
 
 class UserManager:
-	def __init__(self, user_list):
+	def __init__(self):
 		self.user_list = {}
 
 	def load_users():
@@ -30,9 +30,14 @@ class UserManager:
 					
 			else:
 				input("Username must be at least 8 characters long...Enter to return")
+				UserManager.register(self)
+		elif register_username == "":
+			return
+				
 		else:
-			print("Username must be at least 4 characters long.") 
-
+			input("Username must be at least 4 characters long.")
+			UserManager.register(self) 
+        
 	def login(self):
 		print("Login Account")
 		login_username = input("Username: ")
