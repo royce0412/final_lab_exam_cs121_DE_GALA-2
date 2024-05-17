@@ -68,6 +68,8 @@ class UserManager:
                 Cls()
                 self.current_user = self.users[username]
                 return True
+            elif username == "" or password == "":
+                return False
             else:
                 raise Exception("Invalid username or password.")
         except Exception as e:

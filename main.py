@@ -21,7 +21,7 @@ def main():
                 usermanager.register()
             elif main_choice == "2":
                 if usermanager.login():
-                    dicegame.current_user = usermanager.current_user  # Set current user in dicegame
+                    dicegame.current_user = usermanager.current_user 
                     dicegame.menu()
             elif main_choice == "3":
                 exit()
