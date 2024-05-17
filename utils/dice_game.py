@@ -1,5 +1,6 @@
 import random
 import os
+import time
 from utils.score import Score
 from datetime import datetime
 
@@ -30,6 +31,11 @@ class DiceGame:
                 file.write(f"{score.username},{score.game_id},{score.points},{score.wins}\n")
 
     def roll_dice(self):
+        print("Rolling the dice", end="", flush=True)
+        for _ in range(3):
+            print(".", end="", flush=True)
+            time.sleep(0.2)
+        print()
         return random.randint(1, 6)
 
     def play_game(self):
@@ -69,6 +75,7 @@ class DiceGame:
                     break
             else:
                 input("Game over. You didn’t win any stages.")
+                Cls()
                 break
 
         if self.current_user.stages_won > 0:
@@ -88,6 +95,7 @@ class DiceGame:
                 print(f"Username: {score.username}, Game ID: {score.game_id}, Points: {score.points}, Stages Won: {score.wins}")
             input("")
             Cls()
+
     def logout(self):
         self.current_user = None
         Cls()
@@ -99,7 +107,7 @@ class DiceGame:
             print("2. Show Top Scores")
             print("3. Logout")
             choice = input("Enter: ")
-            
+
             if choice == "1":
                 self.play_game()
                 Cls()
@@ -111,3 +119,4 @@ class DiceGame:
                 break
             else:
                 print("Invalid choice. Please try again.")
+                Cls()
