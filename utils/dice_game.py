@@ -1,20 +1,105 @@
-from .user import *
+import random
+import os
+from utils.score import Score
+from datetime import datetime
+
 class DiceGame:
-	def load_scores():
-		pass
+    def __init__(self, user_manager):
+        self.user_manager = user_manager
+        self.current_user = None
+        self.scores = []
+        self.load_scores()
 
-	def save_scores():
-		pass
+    def load_scores(self):
+        if not os.path.exists('data1'):
+            os.makedirs('data1')
+        if not os.path.exists('data1/rankings.txt'):
+            open('data1/rankings.txt', 'w').close()
+        else:
+            with open('data1/rankings.txt', 'r') as file:
+                for line in file:
+                    username, game_id, points, wins = line.strip().split(',')
+                    self.scores.append(Score(username, game_id, int(points), int(wins)))
 
-	def play_game():
-		pass
+    def save_scores(self):
+        with open('data1/rankings.txt', 'w') as file:
+            for score in self.scores:
+                file.write(f"{score.username},{score.game_id},{score.points},{score.wins}\n")
 
-	def show_top_scores():
-		pass
+    def roll_dice(self):
+        return random.randint(1, 6)
 
-	def logout():
-		pass
+    def play_game(self):
+        if self.current_user is None:
+            print("No user is currently logged in.")
+            return
 
-	def menu():
-		pass
-		
+        self.current_user.points = 0
+        self.current_user.stages_won = 0
+
+        while True:
+            user_wins = 0
+            cpu_wins = 0
+
+            for _ in range(3):
+                user_roll = self.roll_dice()
+                cpu_roll = self.roll_dice()
+
+                print(f"You rolled a {user_roll}. CPU rolled a {cpu_roll}.")
+                if user_roll > cpu_roll:
+                    user_wins += 1
+                elif cpu_roll > user_roll:
+                    cpu_wins += 1
+
+                if user_wins == 2 or cpu_wins == 2:
+                    break
+
+            if user_wins > cpu_wins:
+                self.current_user.points += 3
+                self.current_user.stages_won += 1
+                print("You won this stage!")
+                print(f"Total Points: {self.current_user.points}")
+                print(f"Stages Won: {self.current_user.stages_won}")
+                choice = input("Enter 1 to continue to the next stage, 0 to stop: ")
+                if choice == "0":
+                    break
+            else:
+                print("Game over. You didn’t win any stages.")
+                break
+
+        if self.current_user.stages_won > 0:
+            game_id = datetime.now().strftime("%Y%m%d%H%M%S%f")
+            self.scores.append(Score(self.current_user.username, game_id, self.current_user.points, self.current_user.stages_won))
+            self.scores.sort(key=lambda x: x.points, reverse=True)
+            self.scores = self.scores[:10]
+            self.save_scores()
+
+    def show_top_scores(self):
+        if not self.scores:
+            print("No scores available yet.")
+        else:
+            print("Top 10 Scores:")
+            for score in self.scores:
+                print(f"Username: {score.username}, Game ID: {score.game_id}, Points: {score.points}, Stages Won: {score.wins}")
+
+    def logout(self):
+        self.current_user = None
+        Cls()
+
+    def menu(self):
+        while True:
+            print(f"Welcome {self.user_manager.current_user.username}!")
+            print("1. Start Game")
+            print("2. Show Top Scores")
+            print("3. Logout")
+            choice = input("Enter: ")
+
+            if choice == "1":
+                self.play_game()
+            elif choice == "2":
+                self.show_top_scores()
+            elif choice == "3":
+                self.logout()
+                break
+            else:
+                print("Invalid choice. Please try again.")
