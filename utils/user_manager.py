@@ -1,6 +1,9 @@
 import os
 from utils.user import User
 
+def Cls():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 class UserManager:
     def __init__(self):
         self.users = {}
@@ -61,7 +64,8 @@ class UserManager:
             password = input("Enter password: ")
 
             if username in self.users and self.users[username].password == password:
-                print(f"Login successful! Welcome, {username}.")
+                input(f"Login successful! Welcome, {username}.")
+                Cls()
                 self.current_user = self.users[username]
                 return True
             else:

@@ -3,6 +3,9 @@ import os
 from utils.score import Score
 from datetime import datetime
 
+def Cls():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 class DiceGame:
     def __init__(self, user_manager):
         self.user_manager = user_manager
@@ -31,7 +34,7 @@ class DiceGame:
 
     def play_game(self):
         if self.current_user is None:
-            print("No user is currently logged in.")
+            input("No user is currently logged in.")
             return
 
         self.current_user.points = 0
@@ -61,10 +64,11 @@ class DiceGame:
                 print(f"Total Points: {self.current_user.points}")
                 print(f"Stages Won: {self.current_user.stages_won}")
                 choice = input("Enter 1 to continue to the next stage, 0 to stop: ")
+                Cls()
                 if choice == "0":
                     break
             else:
-                print("Game over. You didn’t win any stages.")
+                input("Game over. You didn’t win any stages.")
                 break
 
         if self.current_user.stages_won > 0:
@@ -76,12 +80,14 @@ class DiceGame:
 
     def show_top_scores(self):
         if not self.scores:
-            print("No scores available yet.")
+            input("No scores available yet.")
+            Cls()
         else:
             print("Top 10 Scores:")
             for score in self.scores:
                 print(f"Username: {score.username}, Game ID: {score.game_id}, Points: {score.points}, Stages Won: {score.wins}")
-
+            input("")
+            Cls()
     def logout(self):
         self.current_user = None
         Cls()
@@ -93,13 +99,15 @@ class DiceGame:
             print("2. Show Top Scores")
             print("3. Logout")
             choice = input("Enter: ")
-
+            
             if choice == "1":
                 self.play_game()
+                Cls()
             elif choice == "2":
                 self.show_top_scores()
             elif choice == "3":
                 self.logout()
+                Cls()
                 break
             else:
                 print("Invalid choice. Please try again.")
